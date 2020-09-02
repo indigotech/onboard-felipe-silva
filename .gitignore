@@ -1,0 +1,67 @@
+# OSX
+#
+.DS_Store
+# React
+dist/
+.temp/
+src/index.js
+src/storybook/story-loader.js
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
+*.iml
+# node.js
+#
+node_modules/
+npm-debug.log
+yarn-error.log
+# BUCK
+buck-out/
+\.buckd/
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Gitignore.md
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+### fastlane ###
+# fastlane - A streamlined workflow tool for Cocoa deployment
+# fastlane specific
+**/fastlane/report.xml
+# deliver temporary files
+fastlane/Preview.html
+# snapshot generated screenshots
+fastlane/screenshots/**/*.png
+fastlane/screenshots/screenshots.html
+# scan temporary files
+fastlane/test_output
+# config file
+fastlane/.env
+build-assets/
+#ios
+ios/Pods/
