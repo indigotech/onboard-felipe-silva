@@ -54,11 +54,7 @@ export default class Main extends Component {
             onChangeText={(senha) => this.setState({password: senha})}
           />
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            this.validate_fields();
-          }}>
+        <TouchableOpacity style={styles.button} onPress={this.validate_fields}>
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
       </View>
