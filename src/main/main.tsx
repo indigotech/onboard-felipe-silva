@@ -19,7 +19,7 @@ export default class Main extends Component {
       password: '',
     };
   }
-  validate_fields = () => {
+  validateFields = () => {
     const {email, password} = this.state;
     if (email === '' || password === '') {
       Alert.alert('Fill the entries with a valid format');
@@ -54,7 +54,7 @@ export default class Main extends Component {
             onChangeText={(senha) => this.setState({password: senha})}
           />
         </View>
-        <TouchableOpacity style={styles.button} onPress={this.validate_fields}>
+        <TouchableOpacity style={styles.button} onPress={this.validateFields}>
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
       </View>
