@@ -6,23 +6,55 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
+const validatePassword = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
+const validateEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 export default class Main extends Component {
-  static navigationOptions = {
-    title: 'Bem-Vindo à Taqtile',
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+    };
+  }
+  validateFields = () => {
+    const {email, password} = this.state;
+    if (email === '' || password === '') {
+      Alert.alert('Fill the entries with a valid format');
+      return false;
+    } else if (validateEmail.test(this.state.email) === true) {
+      if (validatePassword.test(this.state.password) === true) {
+        Alert.alert('Valid password and e-mail');
+      } else {
+        Alert.alert('Valid e-mail, but invalid password');
+      }
+    } else {
+      Alert.alert('Invalid e-mail.');
+    }
+    return true;
   };
+
   render() {
     return (
       <View style={styles.loginContainer}>
         <Text style={styles.title}>Bem-vindo(a) à Taqtile!</Text>
         <View style={styles.loginTextInputsButton}>
           <Text style={styles.textInput}>E-mail</Text>
-          <TextInput style={styles.loginInput} />
+          <TextInput
+            style={styles.loginInput}
+            autoCapitalize="none"
+            onChangeText={(val) => this.setState({email: val})}
+          />
           <Text style={styles.textInput}>Senha</Text>
-          <TextInput style={styles.loginInput} />
+          <TextInput
+            style={styles.loginInput}
+            autoCapitalize="none"
+            onChangeText={(senha) => this.setState({password: senha})}
+          />
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => {}}>
+        <TouchableOpacity style={styles.button} onPress={this.validateFields}>
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
       </View>
@@ -62,6 +94,7 @@ const styles = StyleSheet.create({
     borderColor: '#a9a9a9',
     borderWidth: 2,
     borderRadius: 20,
+    textAlign: 'center',
   },
   button: {
     height: 40,
