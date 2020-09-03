@@ -1,5 +1,6 @@
 import React from 'react';
-import {SafeAreaView, View, Text, StatusBar} from 'react-native';
+import {SafeAreaView, StatusBar} from 'react-native';
+import Main from './src/main/main.tsx';
 
 declare const global: {HermesInternal: null | {}};
 
@@ -8,9 +9,7 @@ const App = () => {
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <View>
-          <Text>Hello World!</Text>
-        </View>
+        <Main />
       </SafeAreaView>
     </>
   );
