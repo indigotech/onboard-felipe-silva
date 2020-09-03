@@ -6,23 +6,57 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
 export default class Main extends Component {
-  static navigationOptions = {
-    title: 'Bem-Vindo à Taqtile',
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+    };
+  }
+  validate_fields = () => {
+    const {email, password} = this.state;
+    const regEx = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/; //Ser maior que 7, ter no minimo 1 número ou letra
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; //validação do e-mail
+    if (email === '' || password === '') {
+      Alert.alert('Fill the entries with a valid format');
+      return false;
+    } else if (reg.test(this.state.email) === true) {
+      if (regEx.test(this.state.password) === true) {
+        Alert.alert('Valid password and e-mail');
+      } else {
+        Alert.alert('Valid e-mail, but invalid password');
+      }
+    } else {
+      Alert.alert('Invalid e-mail.');
+    }
+    return true;
   };
+
   render() {
     return (
       <View style={styles.loginContainer}>
         <Text style={styles.title}>Bem-vindo(a) à Taqtile!</Text>
         <View style={styles.loginTextInputsButton}>
           <Text style={styles.textInput}>E-mail</Text>
-          <TextInput style={styles.loginInput} />
+          <TextInput
+            style={styles.loginInput}
+            onChangeText={(val) => this.setState({email: val})}
+          />
           <Text style={styles.textInput}>Senha</Text>
-          <TextInput style={styles.loginInput} />
+          <TextInput
+            style={styles.loginInput}
+            onChangeText={(senha) => this.setState({password: senha})}
+          />
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            this.validate_fields();
+          }}>
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
       </View>
