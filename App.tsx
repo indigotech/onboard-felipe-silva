@@ -1,6 +1,6 @@
 import React from 'react';
 import {SafeAreaView, StatusBar} from 'react-native';
-import Main from './src/main/main.tsx';
+import Main from './src/main/main';
 
 declare const global: {HermesInternal: null | {}};
 
