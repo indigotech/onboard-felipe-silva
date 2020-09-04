@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 
-import {ApolloClient, InMemoryCache, gql} from '@apollo/client';
-
+import sendLogin from '../services/sendLogin';
 import {
   View,
   Text,
@@ -11,30 +10,11 @@ import {
   Alert,
 } from 'react-native';
 
-function sendLogin(email: string, password: string) {
-  const client = new ApolloClient({
-    uri: 'https://tq-template-server-sample.herokuapp.com/graphql',
-    cache: new InMemoryCache(),
-  });
-  client
-    .mutate({
-      mutation: gql`
-        mutation {
-          login(data: {email: "${email}", password: "${password}"}) {
-            token
-          }
-        }
-      `,
-    })
-    .then((result) => console.log(result))
-    .then((error) => console.log(error));
-}
-
 const validatePassword = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
-const validateEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const validateEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 export default class Main extends Component {
-  constructor(props: Readonly<{}>) {
+  constructor(props: any) {
     super(props);
     this.state = {
       email: '',
