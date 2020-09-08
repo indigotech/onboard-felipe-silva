@@ -1,5 +1,5 @@
 import {ApolloClient, InMemoryCache, gql} from '@apollo/client';
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export async function sendLogin(email: string, password: string) {
   const client = new ApolloClient({

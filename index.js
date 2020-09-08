@@ -3,8 +3,8 @@
  */
 
 import {Navigation} from 'react-native-navigation';
-import Main from './src/loginPage/login';
-import UserList from './src/pages/userList';
+import Main from './src/components/loginPage';
+import UserList from './src/components/userList';
 
 Navigation.registerComponent('Main', () => Main);
 Navigation.registerComponent('UserList', () => UserList);
