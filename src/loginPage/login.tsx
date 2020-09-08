@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-
-import sendLogin from '../services/sendLogin';
+import {sendLogin} from '../services/sendLogin';
 import {
   View,
   Text,
@@ -9,26 +8,58 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
+import Loading from '../pages/loading';
 
 const validatePassword = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
 const validateEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
-export default class Main extends Component {
+interface MainComponentState {
+  email: string;
+  password: string;
+  isLoading: boolean;
+}
+
+interface MainComponentProps {
+  props: void;
+  navigation: any;
+}
+
+export default class Main extends Component<
+  MainComponentProps,
+  MainComponentState
+> {
   constructor(props: any) {
     super(props);
     this.state = {
       email: '',
       password: '',
+      isLoading: false,
     };
   }
+
+  loading = async () => {
+    this.setState({
+      isLoading: true,
+    });
+    try {
+      const resultado = await sendLogin(this.state.email, this.state.password);
+      this.props.navigation.navigate('afterLogin', {resultado});
+    } catch (error) {
+      Alert.alert(error.message);
+    } finally {
+      this.setState({
+        isLoading: false,
+      });
+    }
+  };
+
   validateFields = () => {
-    const {email, password} = this.state;
-    if (email === '' || password === '') {
+    if (this.state.email === '' || this.state.password === '') {
       Alert.alert('Fill the entries with a valid format');
       return false;
     } else if (validateEmail.test(this.state.email) === true) {
       if (validatePassword.test(this.state.password) === true) {
-        sendLogin(this.state.email, this.state.password);
+        this.loading();
       } else {
         Alert.alert('Valid e-mail, but invalid password');
       }
@@ -39,27 +70,32 @@ export default class Main extends Component {
   };
 
   render() {
+    if (this.state.isLoading) {
+      return <Loading />;
+    }
     return (
-      <View style={styles.loginContainer}>
-        <Text style={styles.title}>Bem-vindo(a) à Taqtile!</Text>
-        <View style={styles.loginTextInputsButton}>
-          <Text style={styles.textInput}>E-mail</Text>
-          <TextInput
-            style={styles.loginInput}
-            autoCapitalize="none"
-            onChangeText={(val) => this.setState({email: val})}
-          />
-          <Text style={styles.textInput}>Senha</Text>
-          <TextInput
-            style={styles.loginInput}
-            autoCapitalize="none"
-            onChangeText={(senha) => this.setState({password: senha})}
-          />
+      <>
+        <View style={styles.loginContainer}>
+          <Text style={styles.title}>Bem-vindo(a) à Taqtile!</Text>
+          <View style={styles.loginTextInputsButton}>
+            <Text style={styles.textInput}>E-mail</Text>
+            <TextInput
+              style={styles.loginInput}
+              autoCapitalize="none"
+              onChangeText={(val) => this.setState({email: val})}
+            />
+            <Text style={styles.textInput}>Senha</Text>
+            <TextInput
+              style={styles.loginInput}
+              autoCapitalize="none"
+              onChangeText={(senha) => this.setState({password: senha})}
+            />
+          </View>
+          <TouchableOpacity style={styles.button} onPress={this.validateFields}>
+            <Text style={styles.buttonText}>Entrar</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.button} onPress={this.validateFields}>
-          <Text style={styles.buttonText}>Entrar</Text>
-        </TouchableOpacity>
-      </View>
+      </>
     );
   }
 }
@@ -79,6 +115,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 40,
     marginBottom: 30,
+    textAlign: 'center',
   },
   loginTextInputsButton: {
     margin: 15,

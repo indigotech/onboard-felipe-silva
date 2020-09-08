@@ -1,16 +1,24 @@
 import React from 'react';
-import {SafeAreaView, StatusBar} from 'react-native';
-import Main from './src/main/main';
+import {StatusBar} from 'react-native';
+import Main from './src/loginPage/login';
+import teste from './src/pages/afterlogin';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 
 declare const global: {HermesInternal: null | {}};
+
+const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <Main />
-      </SafeAreaView>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Login" component={Main} />
+          <Stack.Screen name="afterLogin" component={teste} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </>
   );
 };
