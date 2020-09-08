@@ -21,19 +21,19 @@ export async function sendLogin(email: string, password: string) {
 
 const storeData = async (value: any) => {
   try {
-    await AsyncStorage.setItem('@storage_Key', value);
+    await AsyncStorage.setItem('@storage_token', value);
   } catch (e) {
-    // saving error
+    console.log('Error');
   }
 };
 
 const getData = async () => {
   try {
-    const value = await AsyncStorage.getItem('@storage_Key');
+    const value = await AsyncStorage.getItem('@storage_token');
     if (value !== null) {
       console.log(value);
     }
   } catch (e) {
-    console.log('erro');
+    console.log('Error');
   }
 };

@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
-import Loading from '../pages/loading';
+import {Navigation} from 'react-native-navigation';
 
 const validatePassword = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
 const validateEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -20,15 +21,16 @@ interface MainComponentState {
 }
 
 interface MainComponentProps {
-  props: void;
+  props: any;
   navigation: any;
+  componentId: any;
 }
 
 export default class Main extends Component<
   MainComponentProps,
   MainComponentState
 > {
-  constructor(props: any) {
+  constructor(props: MainComponentProps) {
     super(props);
     this.state = {
       email: '',
@@ -37,13 +39,20 @@ export default class Main extends Component<
     };
   }
 
-  loading = async () => {
+  private login = async () => {
     this.setState({
       isLoading: true,
     });
     try {
-      const resultado = await sendLogin(this.state.email, this.state.password);
-      this.props.navigation.navigate('userList', {resultado});
+      const result = await sendLogin(this.state.email, this.state.password);
+      Navigation.push(this.props.componentId, {
+        component: {
+          name: 'UserList',
+          passProps: {
+            result: {result},
+          },
+        },
+      });
     } catch (error) {
       Alert.alert(error.message);
     } finally {
@@ -53,13 +62,13 @@ export default class Main extends Component<
     }
   };
 
-  validateFields = () => {
+  private validateFields = () => {
     if (this.state.email === '' || this.state.password === '') {
       Alert.alert('Fill the entries with a valid format');
       return false;
     } else if (validateEmail.test(this.state.email) === true) {
       if (validatePassword.test(this.state.password) === true) {
-        this.loading();
+        this.login();
       } else {
         Alert.alert('Valid e-mail, but invalid password');
       }
@@ -70,8 +79,20 @@ export default class Main extends Component<
   };
 
   render() {
-    if (this.state.isLoading) {
-      return <Loading />;
+    const loading = this.state.isLoading;
+    let button;
+    if (loading) {
+      button = (
+        <View style={styles.button}>
+          <ActivityIndicator size="large" color="#FFF" />
+        </View>
+      );
+    } else {
+      button = (
+        <TouchableOpacity style={styles.button} onPress={this.validateFields}>
+          <Text style={styles.buttonText}>Entrar</Text>
+        </TouchableOpacity>
+      );
     }
     return (
       <>
@@ -91,9 +112,7 @@ export default class Main extends Component<
               onChangeText={(senha) => this.setState({password: senha})}
             />
           </View>
-          <TouchableOpacity style={styles.button} onPress={this.validateFields}>
-            <Text style={styles.buttonText}>Entrar</Text>
-          </TouchableOpacity>
+          {button}
         </View>
       </>
     );
