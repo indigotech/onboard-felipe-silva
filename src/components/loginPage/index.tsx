@@ -49,7 +49,7 @@ export default class Main extends Component<
         component: {
           name: 'UserList',
           passProps: {
-            result: {result},
+            userList: {result},
           },
         },
       });
