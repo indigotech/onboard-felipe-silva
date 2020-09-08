@@ -22,6 +22,7 @@ export default class UserList extends Component<
       screen = (
         <FlatList
           data={users}
+          keyExtractor={(item) => item.id}
           renderItem={({item}) => (
             <View style={styles.userBox}>
               <Text style={styles.userName}>{item.name}</Text>

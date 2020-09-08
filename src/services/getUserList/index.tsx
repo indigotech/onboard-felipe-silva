@@ -28,6 +28,7 @@ async function getUserListclient() {
           nodes {
             name
             email
+            id
           }
         }
       }

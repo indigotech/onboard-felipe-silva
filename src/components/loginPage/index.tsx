@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {sendLogin} from '../../services/sendLogin';
+import {sendLogin} from 'services/sendLogin';
 import styles from './styles';
 import {
   View,
@@ -21,7 +21,6 @@ interface MainComponentState {
 }
 
 interface MainComponentProps {
-  props: any;
   navigation: any;
   componentId: any;
 }
@@ -40,9 +39,7 @@ export default class Main extends Component<
   }
 
   private login = async () => {
-    this.setState({
-      isLoading: true,
-    });
+    this.setState({isLoading: true});
     try {
       const result = await sendLogin(this.state.email, this.state.password);
       Navigation.push(this.props.componentId, {
@@ -56,18 +53,16 @@ export default class Main extends Component<
     } catch (error) {
       Alert.alert(error.message);
     } finally {
-      this.setState({
-        isLoading: false,
-      });
+      this.setState({isLoading: false});
     }
   };
 
   private validateFields = () => {
     if (this.state.email === '' || this.state.password === '') {
       Alert.alert('Fill the entries with a valid format');
-      return false;
-    } else if (validateEmail.test(this.state.email) === true) {
-      if (validatePassword.test(this.state.password) === true) {
+    }
+    if (validateEmail.test(this.state.email)) {
+      if (validatePassword.test(this.state.password)) {
         this.login();
       } else {
         Alert.alert('Valid e-mail, but invalid password');
@@ -75,7 +70,6 @@ export default class Main extends Component<
     } else {
       Alert.alert('Invalid e-mail.');
     }
-    return true;
   };
 
   render() {

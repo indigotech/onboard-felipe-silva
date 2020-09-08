@@ -16,7 +16,7 @@ export async function sendLogin(email: string, password: string) {
           }
         `,
   });
-  storeData(mutation.data.login.token);
+  await storeData(mutation.data.login.token);
   try {
     const teste = await getUserList();
     return teste;
