@@ -43,7 +43,7 @@ export default class Main extends Component<
     });
     try {
       const resultado = await sendLogin(this.state.email, this.state.password);
-      this.props.navigation.navigate('afterLogin', {resultado});
+      this.props.navigation.navigate('userList', {resultado});
     } catch (error) {
       Alert.alert(error.message);
     } finally {
