@@ -19,7 +19,7 @@ export async function sendLogin(email: string, password: string) {
   });
   await storeToken(mutation.data.login.token);
   try {
-    const userList = (await getUserList()).data.users.nodes;
+    const userList = (await getUserList(0)).data.users.nodes;
     return userList;
   } catch (error) {
     console.log(error);

@@ -28,25 +28,25 @@ const client = new ApolloClient({
   link: authLink.concat(httpLink),
 });
 
-async function getCount() {
-  return client.query({
-    query: gql`
-      query User {
-        users(pageInfo: {offset: 0}) {
-          count
-        }
-      }
-    `,
-  });
-}
+// async function getCount() {
+//   return client.query({
+//     query: gql`
+//       query User {
+//         users(pageInfo: {offset: 0}) {
+//           count
+//         }
+//       }
+//     `,
+//   });
+// }
 
-async function getUserListclient() {
-  const countQuery = await getCount();
-  const count = countQuery.data.users.count;
+async function getUserList(offset: any) {
+  //   const countQuery = await getCount();
+  //   const count = countQuery.data.users.count;
   return client.query({
     query: gql`
       query User {
-        users(pageInfo: {offset: 0, limit: ${count}}) {
+        users(pageInfo: {offset: ${offset}, limit: 10}) {
           nodes {
             name
             email
@@ -58,4 +58,4 @@ async function getUserListclient() {
   });
 }
 
-export default getUserListclient;
+export default getUserList;
