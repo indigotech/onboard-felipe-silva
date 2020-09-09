@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList, SafeAreaView} from 'react-native';
-import styles from './styles';
+import {styles} from './styles';
 import userOffset from '../../services/renderUser';
 
 interface UserListComponentProps {
