@@ -2,21 +2,21 @@ import React, {Component} from 'react';
 import {View, Text, FlatList, SafeAreaView} from 'react-native';
 import styles from './styles';
 
-interface UserListComponentState {
-  userList: any;
+interface UserListComponentProps {
+  userList: User[];
 }
 
-interface UserListComponentProps {
-  props: any;
+interface User {
+  id: string;
+  name: string;
+  email: string;
 }
-export default class UserList extends Component<
-  UserListComponentState,
-  UserListComponentProps
-> {
+
+export default class UserList extends Component<UserListComponentProps> {
   render() {
     let screen;
     if (this.props.userList) {
-      const users = this.props.userList.result.data.users.nodes;
+      const users = this.props.userList;
 
       screen = (
         <FlatList
