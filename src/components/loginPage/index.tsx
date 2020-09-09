@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {sendLogin} from 'services/sendLogin';
+import {sendLogin} from '../../services/sendLogin';
 import styles from './styles';
 import {
   View,

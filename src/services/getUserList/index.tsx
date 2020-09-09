@@ -20,11 +20,25 @@ const client = new ApolloClient({
   link: authLink.concat(httpLink),
 });
 
-async function getUserListclient() {
+async function getCount() {
   const query = await client.query({
     query: gql`
       query User {
         users(pageInfo: {offset: 0}) {
+          count
+        }
+      }
+    `,
+  });
+  return query.data.users.count;
+}
+
+async function getUserListclient() {
+  const count = await getCount();
+  const query = await client.query({
+    query: gql`
+      query User {
+        users(pageInfo: {offset: 0, limit: ${count}}) {
           nodes {
             name
             email

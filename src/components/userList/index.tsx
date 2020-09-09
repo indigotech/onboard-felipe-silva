@@ -17,7 +17,6 @@ export default class UserList extends Component<
     let screen;
     if (this.props.userList) {
       const users = this.props.userList.result.data.users.nodes;
-      console.log(users);
 
       screen = (
         <FlatList
@@ -25,7 +24,9 @@ export default class UserList extends Component<
           keyExtractor={(item) => item.id}
           renderItem={({item}) => (
             <View style={styles.userBox}>
-              <Text style={styles.userName}>{item.name}</Text>
+              <Text style={styles.userName}>
+                {item.id} - {item.name}
+              </Text>
               <Text style={styles.userEmail}>{item.email}</Text>
             </View>
           )}
