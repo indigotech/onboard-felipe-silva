@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList, SafeAreaView} from 'react-native';
 import styles from './styles';
-import queryUser from '../../services/renderUser';
+import userOffset from '../../services/renderUser';
 
 interface UserListComponentProps {
   userList: User[];
 }
 
 interface UserListComponentState {
-  offset: number;
   userList: object;
 }
 
@@ -25,7 +24,6 @@ export default class UserList extends Component<
   constructor(props: UserListComponentProps) {
     super(props);
     this.state = {
-      offset: 10,
       userList: this.props.userList,
     };
   }
@@ -44,10 +42,10 @@ export default class UserList extends Component<
           </View>
         )}
         onEndReached={async () => {
-          const userList = await queryUser();
+          const userList = await userOffset();
           this.setState({userList: [...this.state.userList, ...userList]});
         }}
-        onEndReachedThreshold={0.8}
+        onEndReachedThreshold={0.5}
       />
     );
 
