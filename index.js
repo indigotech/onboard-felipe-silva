@@ -5,9 +5,11 @@
 import {Navigation} from 'react-native-navigation';
 import Main from './src/components/loginPage';
 import UserList from './src/components/userList';
+import AddUser from './src/components/addUser/addUser';
 
 Navigation.registerComponent('Main', () => Main);
 Navigation.registerComponent('UserList', () => UserList);
+Navigation.registerComponent('AddUser', () => AddUser);
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setRoot(loginPage);
 });
@@ -19,7 +21,7 @@ const loginPage = {
       children: [
         {
           component: {
-            name: 'Main',
+            name: 'UserList',
           },
         },
       ],

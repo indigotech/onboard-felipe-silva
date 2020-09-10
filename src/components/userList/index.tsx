@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {View, Text, FlatList, SafeAreaView} from 'react-native';
 import {styles} from './styles';
 import getUserList, {User} from '../../services/getUserList';
+import Fabbutton from '../fabbutton';
 
 const UserList: React.FC = () => {
   const [userList, setUserList] = useState<User[]>([]);
@@ -40,6 +41,7 @@ const UserList: React.FC = () => {
         onEndReached={() => addUserList()}
         onEndReachedThreshold={1}
       />
+      <Fabbutton />
     </SafeAreaView>
   );
 };
