@@ -40,13 +40,10 @@ export default class Main extends Component<
   private login = async () => {
     this.setState({isLoading: true});
     try {
-      const userList = await sendLogin(this.state.email, this.state.password);
+      await sendLogin(this.state.email, this.state.password);
       Navigation.push(this.props.componentId, {
         component: {
           name: 'UserList',
-          passProps: {
-            userList,
-          },
         },
       });
     } catch (error) {

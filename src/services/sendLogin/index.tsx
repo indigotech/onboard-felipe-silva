@@ -1,6 +1,5 @@
 import {ApolloClient, InMemoryCache, gql} from '@apollo/client';
 import AsyncStorage from '@react-native-community/async-storage';
-import getUserList from '../getUserList';
 import tokenKey from '../../tokenKey';
 
 export async function sendLogin(email: string, password: string) {
@@ -17,10 +16,8 @@ export async function sendLogin(email: string, password: string) {
           }
         `,
   });
-  await storeToken(mutation.data.login.token);
   try {
-    const userList = (await getUserList(0)).data.users.nodes;
-    return userList;
+    await storeToken(mutation.data.login.token);
   } catch (error) {
     console.log(error);
   }
