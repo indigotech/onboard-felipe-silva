@@ -31,6 +31,10 @@ UserList.options = {
   topBar: {
     title: {
       text: 'UserList',
+      color: '#D0D3D4',
+    },
+    background: {
+      color: '#0d0d0f',
     },
   },
 };
@@ -39,6 +43,10 @@ Main.options = {
   topBar: {
     title: {
       text: 'Login',
+      color: '#D0D3D4',
+    },
+    background: {
+      color: '#0d0d0f',
     },
   },
 };

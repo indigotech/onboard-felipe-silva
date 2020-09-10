@@ -1,13 +1,47 @@
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
-import styles from './styles';
+import React, {useState, useEffect, useRef} from 'react';
+import {View, Text, FlatList, SafeAreaView} from 'react-native';
+import {styles} from './styles';
+import getUserList, {User} from '../../services/getUserList';
 
-export default class UserList extends Component {
-  render() {
-    return (
-      <View>
-        <Text>Página</Text>
-      </View>
-    );
-  }
-}
+const UserList: React.FC = () => {
+  const [userList, setUserList] = useState<User[]>([]);
+  const offset = useRef<number>(0);
+  const nextPage = useRef<boolean>(true);
+
+  const addUserList = async () => {
+    if (nextPage.current) {
+      const queryUser = (await getUserList(offset.current)).data;
+      try {
+        setUserList([...userList, ...queryUser.users.nodes]);
+        offset.current += 10;
+        nextPage.current = queryUser.users.pageInfo.hasNextPage;
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+  };
+
+  useEffect(() => {
+    addUserList();
+  }, []);
+  return (
+    <SafeAreaView style={styles.screen}>
+      <FlatList
+        data={userList}
+        keyExtractor={(item: User) => item.id.toString()}
+        renderItem={({item}) => (
+          <View style={styles.userBox}>
+            <Text style={styles.userName}>
+              {item.id} - {item.name}
+            </Text>
+            <Text style={styles.userEmail}>{item.email}</Text>
+          </View>
+        )}
+        onEndReached={() => addUserList()}
+        onEndReachedThreshold={1}
+      />
+    </SafeAreaView>
+  );
+};
+
+export default UserList;
