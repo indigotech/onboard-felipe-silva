@@ -36,8 +36,8 @@ const client = new ApolloClient({
   link: authLink.concat(httpLink),
 });
 
-async function getUserList(offset: number) {
-  const userList = await client.query<UserData>({
+function getUserList(offset: number) {
+  return client.query<UserData>({
     query: gql`
       query User {
         users(pageInfo: {offset: ${offset}, limit: 10}) {
@@ -53,11 +53,6 @@ async function getUserList(offset: number) {
       }
     `,
   });
-  try {
-    return userList.data;
-  } catch (e) {
-    console.warn(e);
-  }
 }
 
 export default getUserList;

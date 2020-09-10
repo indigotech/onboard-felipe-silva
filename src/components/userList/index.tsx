@@ -10,10 +10,14 @@ const UserList: React.FC = () => {
 
   const addUserList = async () => {
     if (nextPage.current) {
-      const queryUser = await getUserList(offset.current);
-      setUserList([...userList, ...queryUser.users.nodes]);
-      offset.current += 10;
-      nextPage.current = queryUser.users.pageInfo.hasNextPage;
+      const queryUser = (await getUserList(offset.current)).data;
+      try {
+        setUserList([...userList, ...queryUser.users.nodes]);
+        offset.current += 10;
+        nextPage.current = queryUser.users.pageInfo.hasNextPage;
+      } catch (e) {
+        console.warn(e);
+      }
     }
   };
 
