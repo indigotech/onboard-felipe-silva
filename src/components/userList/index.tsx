@@ -6,23 +6,20 @@ import getUserList, {User} from '../../services/getUserList';
 const UserList: React.FC = () => {
   const [userList, setUserList] = useState<User[]>([]);
   const offset = useRef<number>(0);
-  const [nextPage, setNextPage] = useState<boolean>(true);
+  const nextPage = useRef<boolean>(true);
 
   const addUserList = async () => {
-    if (nextPage) {
+    if (nextPage.current) {
       const queryUser = await getUserList(offset.current);
       setUserList([...userList, ...queryUser.users.nodes]);
       offset.current += 10;
-      if (nextPage !== queryUser.users.pageInfo.hasNextPage) {
-        setNextPage(queryUser.users.pageInfo.hasNextPage);
-      }
+      nextPage.current = queryUser.users.pageInfo.hasNextPage;
     }
   };
 
   useEffect(() => {
     addUserList();
   }, []);
-
   return (
     <SafeAreaView style={styles.screen}>
       <FlatList
