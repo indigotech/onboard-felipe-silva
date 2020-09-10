@@ -1,47 +1,59 @@
-import React, {useState} from 'react';
+import React, {useRef} from 'react';
 import {Text, View, TextInput, TouchableOpacity} from 'react-native';
 import styles from './styles';
 
-interface States {
+interface AddUserProps {
+  User: User;
+}
+interface User {
+  phone: string;
+  password: string;
   name: string;
   email: string;
   birthdate: string;
 }
 
-const AddUser: React.FC = () => {
-  const [name, setName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [birthdate, setBirth] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
+const AddUser: React.FC<AddUserProps> = () => {
+  const name = useRef('');
+  const email = useRef('');
+  const password = useRef('');
+  const birthdate = useRef('');
+  const phone = useRef('');
 
-  const validateDate = () => {
-    let date = new Date();
-    const dd = date.getDate();
-    const mm = date.getMonth() + 1;
-    const yyyy = date.getFullYear();
-    const today: string = dd + '/' + mm + '/' + yyyy;
-    return today;
+  const validateDate = (val: {current: string}) => {
+    const dateTester = /(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))/;
+    const todayDate = new Date();
+    const yearMonthDay = val.current.split('-');
+    const birth = new Date(
+      Number(yearMonthDay[0]),
+      Number(yearMonthDay[1]) - 1,
+      Number(yearMonthDay[2]),
+    );
+    if (dateTester.test(val.current) && birth <= todayDate) {
+      return true;
+    } else {
+      return false;
+    }
   };
-  const validateEmail = (val: string) => {
+  const validateEmail = (val: {current: string}) => {
     const emailTester = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-    if (emailTester.test(val)) {
+    if (emailTester.test(val.current)) {
       return true;
     } else {
       return false;
     }
   };
-  const validatePassword = (val: string) => {
+  const validatePassword = (val: {current: string}) => {
     const passwordTester = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
-    if (passwordTester.test(val)) {
+    if (passwordTester.test(val.current)) {
       return true;
     } else {
       return false;
     }
   };
-  const validatePhone = (val: string) => {
-    const phoneTester = /(?=.{9,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
-    if (phoneTester.test(val)) {
+  const validatePhone = (val: {current: string}) => {
+    const phoneTester = /^[0-9]*$/;
+    if (phoneTester.test(val.current) && val.current.length === 9) {
       return true;
     } else {
       return false;
@@ -52,7 +64,7 @@ const AddUser: React.FC = () => {
     if (
       validatePhone(phone) &&
       validateEmail(email) &&
-      validateDate &&
+      validateDate(birthdate) &&
       validatePassword(password)
     ) {
       return true;
@@ -66,35 +78,35 @@ const AddUser: React.FC = () => {
         <Text style={styles.textInput}>Full Name:</Text>
         <TextInput
           style={styles.loginInput}
-          onChangeText={(val) => setName(val)}
+          onChangeText={(val) => (name.current = val)}
         />
         <Text style={styles.textInput}>Email:</Text>
         <TextInput
           style={styles.loginInput}
-          onChangeText={(val) => setEmail(val)}
+          onChangeText={(val) => (email.current = val)}
         />
         <Text style={styles.textInput}>
-          Password (must have 7 digits with at least one number and one letter):
+          Password (At least 7 digits, one number and one letter):
         </Text>
         <TextInput
           style={styles.loginInput}
-          onChangeText={(val) => setPassword(val)}
+          onChangeText={(val) => (password.current = val)}
         />
-        <Text style={styles.textInput}>Birthdate (dd/mm/aa):</Text>
+        <Text style={styles.textInput}>Birthdate (yyyy-mm-dd):</Text>
         <TextInput
           style={styles.loginInput}
-          onChangeText={(val) => setBirth(val)}
+          onChangeText={(val) => (birthdate.current = val)}
         />
         <Text style={styles.textInput}>Phone Number (only numbers):</Text>
         <TextInput
           style={styles.loginInput}
-          onChangeText={(value) => setPhone(value)}
+          onChangeText={(val) => (phone.current = val)}
         />
       </View>
       <View style={styles.buttonView}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => validateEmail(email)}>
+          onPress={() => validateFields()}>
           <Text style={styles.buttonText}>Cadastrar</Text>
         </TouchableOpacity>
       </View>

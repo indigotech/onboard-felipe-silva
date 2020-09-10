@@ -4,7 +4,7 @@ import {styles} from './styles';
 import getUserList, {User} from '../../services/getUserList';
 import Fabbutton from '../fabbutton';
 
-const UserList: React.FC = () => {
+const UserList: React.FC<{componentId: string}> = (props) => {
   const [userList, setUserList] = useState<User[]>([]);
   const offset = useRef<number>(0);
   const nextPage = useRef<boolean>(true);
@@ -41,7 +41,7 @@ const UserList: React.FC = () => {
         onEndReached={() => addUserList()}
         onEndReachedThreshold={1}
       />
-      <Fabbutton />
+      <Fabbutton componentId={props.componentId} />
     </SafeAreaView>
   );
 };

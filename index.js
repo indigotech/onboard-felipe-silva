@@ -21,7 +21,7 @@ const loginPage = {
       children: [
         {
           component: {
-            name: 'UserList',
+            name: 'Main',
           },
         },
       ],
@@ -45,6 +45,18 @@ Main.options = {
   topBar: {
     title: {
       text: 'Login',
+      color: '#D0D3D4',
+    },
+    background: {
+      color: '#0d0d0f',
+    },
+  },
+};
+
+AddUser.options = {
+  topBar: {
+    title: {
+      text: 'Sign Up',
       color: '#D0D3D4',
     },
     background: {

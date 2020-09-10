@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
   Text,
   StyleSheet,
@@ -12,26 +12,24 @@ interface FabbuttonProps {
   componentId: string;
 }
 
-export default class Fabbutton extends Component<FabbuttonProps> {
-  render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            Navigation.push(this.props.componentId, {
-              component: {
-                name: 'AddUser',
-              },
-            });
-          }}>
-          <Animated.View style={[styles.button, styles.menu]}>
-            <Text style={styles.buttonText}>+</Text>
-          </Animated.View>
-        </TouchableWithoutFeedback>
-      </SafeAreaView>
-    );
-  }
-}
+const Fabbutton = (props: FabbuttonProps) => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Navigation.push(props.componentId, {
+            component: {
+              name: 'AddUser',
+            },
+          });
+        }}>
+        <Animated.View style={[styles.button, styles.menu]}>
+          <Text style={styles.buttonText}>+</Text>
+        </Animated.View>
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   buttonText: {
@@ -62,3 +60,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#9466ff',
   },
 });
+
+export default Fabbutton;
