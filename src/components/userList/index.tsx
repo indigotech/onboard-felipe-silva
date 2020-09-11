@@ -26,6 +26,15 @@ const UserList: NavigationFunctionComponent = (props) => {
   useEffect(() => {
     addUserList();
   }, []);
+
+  const handleFabPress = () => {
+    Navigation.push(props.componentId, {
+      component: {
+        name: 'AddUser',
+      },
+    });
+  };
+
   return (
     <SafeAreaView style={styles.screen}>
       <FlatList
@@ -42,16 +51,7 @@ const UserList: NavigationFunctionComponent = (props) => {
         onEndReached={() => addUserList()}
         onEndReachedThreshold={1}
       />
-      <Fabbutton
-        componentId={props.componentId}
-        onPress={() => {
-          Navigation.push(props.componentId, {
-            component: {
-              name: 'AddUser',
-            },
-          });
-        }}
-      />
+      <Fabbutton componentId={props.componentId} onPress={handleFabPress} />
     </SafeAreaView>
   );
 };

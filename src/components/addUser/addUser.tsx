@@ -27,13 +27,18 @@ const AddUser: React.FC<AddUserProps> = () => {
   const phone = useRef('');
 
   const validateFields = () => {
-    return (
+    if (
       validatePhone(phone.current) &&
       validateEmail(email.current) &&
       validateDate(birthdate.current) &&
       validatePassword(password.current)
-    );
+    ) {
+      console.log('sucess');
+    } else {
+      console.log('failed');
+    }
   };
+
   return (
     <View style={styles.screen}>
       <View style={styles.loginView}>
