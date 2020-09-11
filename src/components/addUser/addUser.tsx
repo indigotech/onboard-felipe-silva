@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import styles from './styles';
+import {Navigation, NavigationFunctionComponent} from 'react-native-navigation';
 import {
   validateDate,
   validateEmail,
@@ -21,16 +22,7 @@ import {
   CreateUserVariables,
 } from '../../services/createUser';
 
-// interface User {
-//   phone: string;
-//   password: string;
-//   name: string;
-//   email: string;
-//   birthdate: string;
-//   role: string;
-// }
-
-const AddUser = () => {
+const AddUser: NavigationFunctionComponent = (props) => {
   const name = useRef('');
   const email = useRef('');
   const password = useRef('');
@@ -66,22 +58,39 @@ const AddUser = () => {
       validatePassword(password.current)
     ) {
       try {
-        return (
-          await mutate({
-            variables: {
-              data: userInfo.current,
-            },
-          })
-        ).data;
+        await mutate({
+          variables: {
+            data: userInfo.current,
+          },
+        });
+        Navigation.push(props.componentId, {
+          component: {
+            name: 'UserList',
+          },
+        });
       } catch (e) {
         Alert.alert(error.message);
       }
     }
   };
 
+  let button;
+  if (loading) {
+    button = (
+      <View style={styles.button}>
+        <ActivityIndicator size="large" color="#FFF" />
+      </View>
+    );
+  } else {
+    button = (
+      <TouchableOpacity style={styles.button} onPress={() => validateFields()}>
+        <Text style={styles.buttonText}>Cadastrar</Text>
+      </TouchableOpacity>
+    );
+  }
+
   return (
     <View style={styles.screen}>
-      {loading && <ActivityIndicator />}
       <View style={styles.loginView}>
         <Text style={styles.textInput}>Full Name:</Text>
         <TextInput
@@ -117,11 +126,12 @@ const AddUser = () => {
         />
       </View>
       <View style={styles.buttonView}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.button}
           onPress={() => validateFields()}>
           <Text style={styles.buttonText}>Cadastrar</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        {button}
       </View>
     </View>
   );
