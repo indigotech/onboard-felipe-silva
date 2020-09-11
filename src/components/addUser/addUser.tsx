@@ -1,5 +1,12 @@
 import React, {useRef} from 'react';
-import {Text, View, TextInput, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import styles from './styles';
 import {
   validateDate,
@@ -7,40 +14,74 @@ import {
   validatePassword,
   validatePhone,
 } from '../../services/validateForms';
+import {useMutation} from '@apollo/client';
+import {User} from '../../services/getUserList';
+import {
+  CreateUserMutation,
+  CreateUserVariables,
+} from '../../services/createUser';
 
-interface AddUserProps {
-  user: User;
-}
-interface User {
-  phone: string;
-  password: string;
-  name: string;
-  email: string;
-  birthdate: string;
-}
+// interface User {
+//   phone: string;
+//   password: string;
+//   name: string;
+//   email: string;
+//   birthdate: string;
+//   role: string;
+// }
 
-const AddUser: React.FC<AddUserProps> = () => {
+const AddUser = () => {
   const name = useRef('');
   const email = useRef('');
   const password = useRef('');
-  const birthdate = useRef('');
+  const birthDate = useRef('');
   const phone = useRef('');
+  const role = useRef('user');
+  const userInfo = useRef({
+    name: name.current,
+    email: email.current,
+    password: password.current,
+    birthDate: birthDate.current,
+    phone: phone.current,
+    role: role.current,
+  });
+  const [mutate, {loading, error, data}] = useMutation<
+    User,
+    CreateUserVariables
+  >(CreateUserMutation);
 
-  const validateFields = () => {
+  const validateFields = async () => {
+    userInfo.current = {
+      name: name.current,
+      email: email.current,
+      password: password.current,
+      birthDate: birthDate.current,
+      phone: phone.current,
+      role: role.current,
+    };
     if (
       validatePhone(phone.current) &&
       validateEmail(email.current) &&
-      validateDate(birthdate.current) &&
+      validateDate(birthDate.current) &&
       validatePassword(password.current)
     ) {
-      console.log('sucess');
-    } else {
-      console.log('failed');
+      try {
+        return (
+          await mutate({
+            variables: {
+              data: userInfo.current,
+            },
+          })
+        ).data;
+      } catch (e) {
+        Alert.alert(error.message);
+      }
     }
   };
 
   return (
     <View style={styles.screen}>
+      {loading && <ActivityIndicator />}
       <View style={styles.loginView}>
         <Text style={styles.textInput}>Full Name:</Text>
         <TextInput
@@ -66,7 +107,7 @@ const AddUser: React.FC<AddUserProps> = () => {
         <Text style={styles.textInput}>Birthdate (yyyy-mm-dd):</Text>
         <TextInput
           style={styles.loginInput}
-          onChangeText={(val) => (birthdate.current = val)}
+          onChangeText={(val) => (birthDate.current = val)}
         />
 
         <Text style={styles.textInput}>Phone Number (only numbers):</Text>

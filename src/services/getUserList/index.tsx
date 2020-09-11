@@ -7,8 +7,10 @@ export interface User {
   email: string;
   name: string;
   id: string;
+  phone: string;
+  birthDate: string;
+  role: string;
 }
-
 interface UserData {
   users: {
     nodes: User[];
@@ -31,7 +33,7 @@ const authLink = setContext(async (_, {headers}) => {
     },
   };
 });
-const client = new ApolloClient({
+export const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: authLink.concat(httpLink),
 });
