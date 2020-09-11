@@ -1,5 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Text, FlatList, SafeAreaView} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import {styles} from './styles';
 import getUserList, {User} from '../../services/getUserList';
 import {Navigation, NavigationFunctionComponent} from 'react-native-navigation';
@@ -35,6 +41,15 @@ const UserList: NavigationFunctionComponent = (props) => {
     });
   };
 
+  const handleDetailsPress = (id: string) => {
+    Navigation.push(props.componentId, {
+      component: {
+        name: 'UserDetail',
+        passProps: {id},
+      },
+    });
+  };
+
   return (
     <SafeAreaView style={styles.screen}>
       <FlatList
@@ -46,6 +61,11 @@ const UserList: NavigationFunctionComponent = (props) => {
               {item.id} - {item.name}
             </Text>
             <Text style={styles.userEmail}>{item.email}</Text>
+            <TouchableOpacity
+              style={styles.detailButton}
+              onPress={() => handleDetailsPress(item.id)}>
+              <Text style={styles.detailButtonText}>Details</Text>
+            </TouchableOpacity>
           </View>
         )}
         onEndReached={() => addUserList()}

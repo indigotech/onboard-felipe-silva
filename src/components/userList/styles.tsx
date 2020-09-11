@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     width: 300,
     margin: 10,
     borderRadius: 20,
+    alignItems: 'center',
   },
   userName: {
     textAlign: 'center',
@@ -30,6 +31,23 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#999',
     fontSize: 16,
+  },
+  detailButton: {
+    marginTop: 15,
+    backgroundColor: '#9466ff',
+    width: 70,
+    height: 25,
+    flex: 1,
+    borderRadius: 5,
+    justifyContent: 'center',
+    borderColor: '#FFF',
+    borderWidth: 1,
+  },
+  detailButtonText: {
+    textAlign: 'center',
+    color: '#ECF0F1',
+    fontSize: 15,
+    fontWeight: 'bold',
   },
 });
 
