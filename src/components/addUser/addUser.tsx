@@ -125,14 +125,7 @@ const AddUser: NavigationFunctionComponent = (props) => {
           onChangeText={(val) => (phone.current = val)}
         />
       </View>
-      <View style={styles.buttonView}>
-        {/* <TouchableOpacity
-          style={styles.button}
-          onPress={() => validateFields()}>
-          <Text style={styles.buttonText}>Cadastrar</Text>
-        </TouchableOpacity> */}
-        {button}
-      </View>
+      <View style={styles.buttonView}>{button}</View>
     </View>
   );
 };
