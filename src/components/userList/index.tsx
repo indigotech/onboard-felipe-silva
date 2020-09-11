@@ -2,9 +2,10 @@ import React, {useState, useEffect, useRef} from 'react';
 import {View, Text, FlatList, SafeAreaView} from 'react-native';
 import {styles} from './styles';
 import getUserList, {User} from '../../services/getUserList';
+import {Navigation, NavigationFunctionComponent} from 'react-native-navigation';
 import Fabbutton from '../fabbutton';
 
-const UserList: React.FC<{componentId: string}> = (props) => {
+const UserList: NavigationFunctionComponent = (props) => {
   const [userList, setUserList] = useState<User[]>([]);
   const offset = useRef<number>(0);
   const nextPage = useRef<boolean>(true);
@@ -41,7 +42,16 @@ const UserList: React.FC<{componentId: string}> = (props) => {
         onEndReached={() => addUserList()}
         onEndReachedThreshold={1}
       />
-      <Fabbutton componentId={props.componentId} />
+      <Fabbutton
+        componentId={props.componentId}
+        onPress={() => {
+          Navigation.push(props.componentId, {
+            component: {
+              name: 'AddUser',
+            },
+          });
+        }}
+      />
     </SafeAreaView>
   );
 };

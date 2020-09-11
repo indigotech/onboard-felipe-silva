@@ -5,24 +5,18 @@ import {
   TouchableWithoutFeedback,
   Animated,
   SafeAreaView,
+  GestureResponderEvent,
 } from 'react-native';
-import {Navigation} from 'react-native-navigation';
 
 interface FabbuttonProps {
   componentId: string;
+  onPress: (event: GestureResponderEvent) => void;
 }
 
 const Fabbutton = (props: FabbuttonProps) => {
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          Navigation.push(props.componentId, {
-            component: {
-              name: 'AddUser',
-            },
-          });
-        }}>
+      <TouchableWithoutFeedback onPress={props.onPress}>
         <Animated.View style={[styles.button, styles.menu]}>
           <Text style={styles.buttonText}>+</Text>
         </Animated.View>
