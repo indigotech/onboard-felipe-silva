@@ -7,9 +7,6 @@ export interface User {
   email: string;
   name: string;
   id: string;
-  phone: string;
-  birthDate: string;
-  role: string;
 }
 interface UserData {
   users: {

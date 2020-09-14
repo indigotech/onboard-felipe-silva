@@ -16,11 +16,16 @@ import {
   validatePhone,
 } from '../../services/validateForms';
 import {useMutation} from '@apollo/client';
-import {User} from '../../services/getUserList';
 import {
   CreateUserMutation,
   CreateUserVariables,
 } from '../../services/createUser';
+
+interface User {
+  email: string;
+  name: string;
+  id: string;
+}
 
 const AddUser: NavigationFunctionComponent = (props) => {
   const name = useRef('');
@@ -29,21 +34,12 @@ const AddUser: NavigationFunctionComponent = (props) => {
   const birthDate = useRef('');
   const phone = useRef('');
   const role = useRef('user');
-  const userInfo = useRef({
-    name: name.current,
-    email: email.current,
-    password: password.current,
-    birthDate: birthDate.current,
-    phone: phone.current,
-    role: role.current,
-  });
-  const [mutate, {loading, error, data}] = useMutation<
-    User,
-    CreateUserVariables
-  >(CreateUserMutation);
+  const [mutate, {loading, error}] = useMutation<User, CreateUserVariables>(
+    CreateUserMutation,
+  );
 
   const validateFields = async () => {
-    userInfo.current = {
+    const userInfo = {
       name: name.current,
       email: email.current,
       password: password.current,
@@ -60,7 +56,7 @@ const AddUser: NavigationFunctionComponent = (props) => {
       try {
         await mutate({
           variables: {
-            data: userInfo.current,
+            data: userInfo,
           },
         });
         Navigation.push(props.componentId, {
