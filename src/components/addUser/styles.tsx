@@ -37,24 +37,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: '#515A5A',
   },
-  button: {
-    height: 50,
-    width: 300,
-    justifyContent: 'center',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#FFF',
-    backgroundColor: '#9466ff',
-  },
-  buttonText: {
-    color: '#f0f8ff',
-    fontWeight: 'bold',
-    fontSize: 20,
-    textAlign: 'center',
-  },
-  buttonView: {
-    margin: 15,
-  },
 });
 
 export default styles;

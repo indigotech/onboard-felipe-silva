@@ -1,15 +1,9 @@
 import React, {Component} from 'react';
 import {sendLogin} from '../../services/sendLogin';
 import styles from './styles';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Text, TextInput, Alert} from 'react-native';
 import {Navigation} from 'react-native-navigation';
+import SquareButton from '../button';
 
 const validatePassword = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
 const validateEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -69,21 +63,6 @@ export default class Main extends Component<
   };
 
   render() {
-    const loading = this.state.isLoading;
-    let button;
-    if (loading) {
-      button = (
-        <View style={styles.button}>
-          <ActivityIndicator size="large" color="#FFF" />
-        </View>
-      );
-    } else {
-      button = (
-        <TouchableOpacity style={styles.button} onPress={this.validateFields}>
-          <Text style={styles.buttonText}>Entrar</Text>
-        </TouchableOpacity>
-      );
-    }
     return (
       <>
         <View style={styles.loginContainer}>
@@ -102,7 +81,11 @@ export default class Main extends Component<
               onChangeText={(senha) => this.setState({password: senha})}
             />
           </View>
-          {button}
+          <SquareButton
+            loading={this.state.isLoading}
+            onPress={this.validateFields}
+            title={'Login'}
+          />
         </View>
       </>
     );

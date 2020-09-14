@@ -1,41 +1,66 @@
 import React, {useRef} from 'react';
-import {Text, View, TextInput, TouchableOpacity} from 'react-native';
+import {Text, View, TextInput, Alert} from 'react-native';
 import styles from './styles';
+import {Navigation, NavigationFunctionComponent} from 'react-native-navigation';
 import {
   validateDate,
   validateEmail,
   validatePassword,
   validatePhone,
 } from '../../services/validateForms';
+import {useMutation} from '@apollo/client';
+import {
+  CreateUserMutation,
+  CreateUserVariables,
+} from '../../services/createUser';
+import FunctButton from '../button';
 
-interface AddUserProps {
-  user: User;
-}
 interface User {
-  phone: string;
-  password: string;
-  name: string;
   email: string;
-  birthdate: string;
+  name: string;
+  id: string;
 }
 
-const AddUser: React.FC<AddUserProps> = () => {
+const AddUser: NavigationFunctionComponent = (props) => {
   const name = useRef('');
   const email = useRef('');
   const password = useRef('');
-  const birthdate = useRef('');
+  const birthDate = useRef('');
   const phone = useRef('');
+  const role = useRef('user');
+  const [mutate, {loading, error}] = useMutation<User, CreateUserVariables>(
+    CreateUserMutation,
+  );
 
-  const validateFields = () => {
+  const validateFields = async () => {
+    const userInfo = {
+      name: name.current,
+      email: email.current,
+      password: password.current,
+      birthDate: birthDate.current,
+      phone: phone.current,
+      role: role.current,
+    };
     if (
       validatePhone(phone.current) &&
       validateEmail(email.current) &&
-      validateDate(birthdate.current) &&
+      validateDate(birthDate.current) &&
       validatePassword(password.current)
     ) {
-      console.log('sucess');
-    } else {
-      console.log('failed');
+      try {
+        await mutate({
+          variables: {
+            data: userInfo,
+          },
+        });
+        Navigation.push(props.componentId, {
+          component: {
+            name: 'UserList',
+          },
+        });
+      } catch (e) {
+        Alert.alert(error.message);
+      }
     }
   };
 
@@ -66,7 +91,7 @@ const AddUser: React.FC<AddUserProps> = () => {
         <Text style={styles.textInput}>Birthdate (yyyy-mm-dd):</Text>
         <TextInput
           style={styles.loginInput}
-          onChangeText={(val) => (birthdate.current = val)}
+          onChangeText={(val) => (birthDate.current = val)}
         />
 
         <Text style={styles.textInput}>Phone Number (only numbers):</Text>
@@ -75,13 +100,11 @@ const AddUser: React.FC<AddUserProps> = () => {
           onChangeText={(val) => (phone.current = val)}
         />
       </View>
-      <View style={styles.buttonView}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => validateFields()}>
-          <Text style={styles.buttonText}>Cadastrar</Text>
-        </TouchableOpacity>
-      </View>
+      <FunctButton
+        loading={loading}
+        onPress={() => validateFields()}
+        title={'Cadastrar'}
+      />
     </View>
   );
 };
