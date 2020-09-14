@@ -6,12 +6,15 @@ import React from 'react';
 import {Navigation} from 'react-native-navigation';
 import Main from './src/components/loginPage';
 import UserList from './src/components/userList';
+import H1 from './src/components/H1';
 import UserDetail from './src/components/userDetail';
 import AddUser from './src/components/addUser/addUser';
 import {ApolloProvider} from '@apollo/client';
 import {client} from './src/services/getUserList';
 
 Navigation.registerComponent('Main', () => Main);
+Navigation.registerComponent('Teste', () => H1);
+
 Navigation.registerComponent('UserList', () => UserList);
 
 Navigation.registerComponent(

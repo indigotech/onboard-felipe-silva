@@ -1,17 +1,19 @@
 import React, {Component} from 'react';
 import {sendLogin} from '../../services/sendLogin';
 import styles from './styles';
-import {View, Text, TextInput, Alert} from 'react-native';
+import {View, Alert} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import FunctButton from '../button';
-
-const validatePassword = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
-const validateEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+import H1 from '../H1';
+import Forms from '../form';
+import {validateEmail, validatePassword} from '../../services/validateForms';
 
 interface MainComponentState {
   email: string;
   password: string;
   isLoading: boolean;
+  emailError: string;
+  passwordError: string;
 }
 
 interface MainComponentProps {
@@ -28,6 +30,8 @@ export default class Main extends Component<
       email: '',
       password: '',
       isLoading: false,
+      emailError: '',
+      passwordError: '',
     };
   }
 
@@ -48,17 +52,11 @@ export default class Main extends Component<
   };
 
   private validateFields = () => {
-    if (this.state.email === '' || this.state.password === '') {
-      Alert.alert('Fill the entries with a valid format');
-    }
-    if (validateEmail.test(this.state.email)) {
-      if (validatePassword.test(this.state.password)) {
-        this.login();
-      } else {
-        Alert.alert('Valid e-mail, but invalid password');
-      }
-    } else {
-      Alert.alert('Invalid e-mail.');
+    if (
+      validateEmail(this.state.email).boolean &&
+      validatePassword(this.state.password)
+    ) {
+      this.login();
     }
   };
 
@@ -66,19 +64,27 @@ export default class Main extends Component<
     return (
       <>
         <View style={styles.loginContainer}>
-          <Text style={styles.title}>Bem-vindo(a) à Taqtile!</Text>
+          <H1 title={'Bem-vindo(a) à Taqtile!'} />
           <View style={styles.loginTextInputsButton}>
-            <Text style={styles.textInput}>E-mail</Text>
-            <TextInput
-              style={styles.loginInput}
-              autoCapitalize="none"
-              onChangeText={(val) => this.setState({email: val})}
+            <Forms
+              label={'E-mail'}
+              onChangeText={(email) =>
+                this.setState({
+                  email: email,
+                  emailError: validateEmail(email).error,
+                })
+              }
+              error={this.state.emailError}
             />
-            <Text style={styles.textInput}>Senha</Text>
-            <TextInput
-              style={styles.loginInput}
-              autoCapitalize="none"
-              onChangeText={(senha) => this.setState({password: senha})}
+            <Forms
+              label={'Senha'}
+              onChangeText={(senha) =>
+                this.setState({
+                  password: senha,
+                  passwordError: validatePassword(senha).error,
+                })
+              }
+              error={this.state.passwordError}
             />
           </View>
           <FunctButton

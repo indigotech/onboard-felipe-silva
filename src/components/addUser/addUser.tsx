@@ -1,5 +1,6 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {Text, View, TextInput, Alert} from 'react-native';
+import H1 from '../H1';
 import styles from './styles';
 import {Navigation, NavigationFunctionComponent} from 'react-native-navigation';
 import {
@@ -14,11 +15,14 @@ import {
   CreateUserVariables,
 } from '../../services/createUser';
 import FunctButton from '../button';
+import Forms from '../form';
 
 interface User {
   email: string;
   name: string;
   id: string;
+  phone: string;
+  birthDate: string;
 }
 
 const AddUser: NavigationFunctionComponent = (props) => {
@@ -28,6 +32,12 @@ const AddUser: NavigationFunctionComponent = (props) => {
   const birthDate = useRef('');
   const phone = useRef('');
   const role = useRef('user');
+  const [errors, setErrors] = useState({
+    phoneError: '',
+    emailError: '',
+    birthDateError: '',
+    passwordError: '',
+  });
   const [mutate, {loading, error}] = useMutation<User, CreateUserVariables>(
     CreateUserMutation,
   );
@@ -42,10 +52,10 @@ const AddUser: NavigationFunctionComponent = (props) => {
       role: role.current,
     };
     if (
-      validatePhone(phone.current) &&
-      validateEmail(email.current) &&
-      validateDate(birthDate.current) &&
-      validatePassword(password.current)
+      validatePhone(phone.current).boolean &&
+      validateEmail(email.current).boolean &&
+      validateDate(birthDate.current).boolean &&
+      validatePassword(password.current).boolean
     ) {
       try {
         await mutate({
@@ -61,45 +71,44 @@ const AddUser: NavigationFunctionComponent = (props) => {
       } catch (e) {
         Alert.alert(error.message);
       }
+    } else {
+      setErrors({
+        phoneError: validatePhone(phone.current).error,
+        emailError: validateEmail(email.current).error,
+        birthDateError: validateDate(birthDate.current).error,
+        passwordError: validatePassword(password.current).error,
+      });
     }
   };
 
   return (
     <View style={styles.screen}>
-      <View style={styles.loginView}>
-        <Text style={styles.textInput}>Full Name:</Text>
-        <TextInput
-          style={styles.loginInput}
-          onChangeText={(val) => (name.current = val)}
-        />
-
-        <Text style={styles.textInput}>Email:</Text>
-        <TextInput
-          style={styles.loginInput}
-          autoCapitalize="none"
-          onChangeText={(val) => (email.current = val)}
-        />
-
-        <Text style={styles.textInput}>
-          Password (At least 7 digits, one number and one letter):
-        </Text>
-        <TextInput
-          style={styles.loginInput}
-          onChangeText={(val) => (password.current = val)}
-        />
-
-        <Text style={styles.textInput}>Birthdate (yyyy-mm-dd):</Text>
-        <TextInput
-          style={styles.loginInput}
-          onChangeText={(val) => (birthDate.current = val)}
-        />
-
-        <Text style={styles.textInput}>Phone Number (only numbers):</Text>
-        <TextInput
-          style={styles.loginInput}
-          onChangeText={(val) => (phone.current = val)}
-        />
-      </View>
+      <H1 title={'Add User'} />
+      <Forms
+        label={'Full Name'}
+        onChangeText={(val) => (name.current = val)}
+        error={''}
+      />
+      <Forms
+        label={'E-mail'}
+        onChangeText={(val) => (email.current = val)}
+        error={errors.emailError}
+      />
+      <Forms
+        label={'Password (At least 7 digits, one number and one letter):'}
+        onChangeText={(val) => (password.current = val)}
+        error={errors.passwordError}
+      />
+      <Forms
+        label={'Birthdate (yyyy-mm-dd)'}
+        onChangeText={(val) => (birthDate.current = val)}
+        error={errors.birthDateError}
+      />
+      <Forms
+        label={'Phone Number (only numbers):'}
+        onChangeText={(val) => (phone.current = val)}
+        error={errors.phoneError}
+      />
       <FunctButton
         loading={loading}
         onPress={() => validateFields()}
