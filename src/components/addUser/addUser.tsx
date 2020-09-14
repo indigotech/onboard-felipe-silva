@@ -1,12 +1,5 @@
 import React, {useRef} from 'react';
-import {
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import {Text, View, TextInput, Alert} from 'react-native';
 import styles from './styles';
 import {Navigation, NavigationFunctionComponent} from 'react-native-navigation';
 import {
@@ -20,6 +13,7 @@ import {
   CreateUserMutation,
   CreateUserVariables,
 } from '../../services/createUser';
+import FunctButton from '../button';
 
 interface User {
   email: string;
@@ -70,21 +64,6 @@ const AddUser: NavigationFunctionComponent = (props) => {
     }
   };
 
-  let button;
-  if (loading) {
-    button = (
-      <View style={styles.button}>
-        <ActivityIndicator size="large" color="#FFF" />
-      </View>
-    );
-  } else {
-    button = (
-      <TouchableOpacity style={styles.button} onPress={() => validateFields()}>
-        <Text style={styles.buttonText}>Cadastrar</Text>
-      </TouchableOpacity>
-    );
-  }
-
   return (
     <View style={styles.screen}>
       <View style={styles.loginView}>
@@ -121,7 +100,11 @@ const AddUser: NavigationFunctionComponent = (props) => {
           onChangeText={(val) => (phone.current = val)}
         />
       </View>
-      <View style={styles.buttonView}>{button}</View>
+      <FunctButton
+        loading={loading}
+        onPress={() => validateFields()}
+        title={'Cadastrar'}
+      />
     </View>
   );
 };
