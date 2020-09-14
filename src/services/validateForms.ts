@@ -7,20 +7,43 @@ export const validateDate = (date: string) => {
     Number(yearMonthDay[1]) - 1,
     Number(yearMonthDay[2]),
   );
-  return dateTester.test(date) && birth <= todayDate;
+  if (dateTester.test(date) && birth <= todayDate) {
+    return {boolean: dateTester.test(date) && birth <= todayDate};
+  } else {
+    return {
+      boolean: dateTester.test(date) && birth <= todayDate,
+      error: 'Invalid Date',
+    };
+  }
 };
 
 export const validateEmail = (email: string) => {
   const emailTester = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-  return emailTester.test(email);
+  if (emailTester.test(email)) {
+    return {boolean: emailTester.test(email)};
+  } else {
+    return {boolean: emailTester.test(email), error: 'Invalid e-mail'};
+  }
 };
 
 export const validatePassword = (password: string) => {
   const passwordTester = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
-  return passwordTester.test(password);
+  if (passwordTester.test(password)) {
+    return {boolean: passwordTester.test(password)};
+  } else {
+    return {
+      boolean: passwordTester.test(password),
+      error:
+        'Password must contain 7 digits and at least one number and one letter',
+    };
+  }
 };
 
 export const validatePhone = (phone: string) => {
   const phoneTester = /^[0-9]*$/;
-  return phoneTester.test(phone) && phone.length === 9;
+  if (phoneTester.test(phone) && phone.length === 9) {
+    return {boolean: phoneTester.test(phone) && phone.length === 9};
+  } else {
+    return {boolean: phoneTester.test(phone), error: 'Invalid phone number'};
+  }
 };

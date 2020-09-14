@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-  GestureResponderEvent,
-} from 'react-native';
+import {View, ActivityIndicator, GestureResponderEvent} from 'react-native';
+import styled from 'styled-components/native';
 
 interface SquareButtonProps {
   onPress: (event: GestureResponderEvent) => void;
@@ -18,39 +12,47 @@ const FunctButton: React.FC<SquareButtonProps> = (props) => {
   let button;
   if (props.loading) {
     button = (
-      <View style={styles.button}>
+      <StyledView>
         <ActivityIndicator size="large" color="#FFF" />
-      </View>
+      </StyledView>
     );
   } else {
     button = (
-      <TouchableOpacity style={styles.button} onPress={props.onPress}>
-        <Text style={styles.buttonText}>{props.title}</Text>
-      </TouchableOpacity>
+      <StyledTouchableOpacity onPress={props.onPress}>
+        <StyledText>{props.title}</StyledText>
+      </StyledTouchableOpacity>
     );
   }
-  return <View style={styles.buttonView}>{button}</View>;
+  return <View>{button}</View>;
 };
 
-const styles = StyleSheet.create({
-  button: {
-    height: 50,
-    width: 300,
-    justifyContent: 'center',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#FFF',
-    backgroundColor: '#9466ff',
-  },
-  buttonText: {
-    color: '#f0f8ff',
-    fontWeight: 'bold',
-    fontSize: 20,
-    textAlign: 'center',
-  },
-  buttonView: {
-    margin: 15,
-  },
-});
+const StyledView = styled.View`
+  background-color: #9466ff;
+  width: 300px;
+  height: 44px;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #fff;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const StyledTouchableOpacity = styled.TouchableOpacity`
+  background-color: #9466ff;
+  width: 300px;
+  height: 44px;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #fff;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const StyledText = styled.Text`
+  font-size: 16px;
+  font-weight: normal;
+  color: #f0f8ff;
+  text-align: center;
+`;
 
 export default FunctButton;
