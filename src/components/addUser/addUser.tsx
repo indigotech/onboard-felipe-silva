@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {Text, View, TextInput, Alert} from 'react-native';
+import {View, Alert} from 'react-native';
 import H1 from '../H1';
 import styles from './styles';
 import {Navigation, NavigationFunctionComponent} from 'react-native-navigation';

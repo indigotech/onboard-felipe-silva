@@ -14,6 +14,7 @@ interface MainComponentState {
   isLoading: boolean;
   emailError: string;
   passwordError: string;
+  errors: {emailError: string; passwordError: string};
 }
 
 interface MainComponentProps {
@@ -32,6 +33,7 @@ export default class Main extends Component<
       isLoading: false,
       emailError: '',
       passwordError: '',
+      errors: {emailError: '', passwordError: ''},
     };
   }
 
@@ -57,6 +59,13 @@ export default class Main extends Component<
       validatePassword(this.state.password)
     ) {
       this.login();
+    } else {
+      this.setState({
+        errors: {
+          emailError: validateEmail(this.state.email).error,
+          passwordError: validatePassword(this.state.password).error,
+        },
+      });
     }
   };
 
@@ -68,23 +77,13 @@ export default class Main extends Component<
           <View style={styles.loginTextInputsButton}>
             <Forms
               label={'E-mail'}
-              onChangeText={(email) =>
-                this.setState({
-                  email: email,
-                  emailError: validateEmail(email).error,
-                })
-              }
-              error={this.state.emailError}
+              onChangeText={(email) => this.setState({email: email})}
+              error={this.state.errors.emailError}
             />
             <Forms
               label={'Senha'}
-              onChangeText={(senha) =>
-                this.setState({
-                  password: senha,
-                  passwordError: validatePassword(senha).error,
-                })
-              }
-              error={this.state.passwordError}
+              onChangeText={(senha) => this.setState({password: senha})}
+              error={this.state.errors.passwordError}
             />
           </View>
           <FunctButton

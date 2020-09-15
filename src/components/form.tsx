@@ -8,16 +8,30 @@ interface FormsProps {
 }
 
 const Forms: React.FC<FormsProps> = (props) => {
-  return (
-    <StyledFormView>
-      <StyledLabel>{props.label}</StyledLabel>
-      <StyledTextField
-        onChangeText={props.onChangeText}
-        autoCapitalize="none"
-      />
-      <Error>{props.error}</Error>
-    </StyledFormView>
-  );
+  let screen;
+  if (!props.error) {
+    screen = (
+      <>
+        <StyledLabel>{props.label}</StyledLabel>
+        <StyledTextField
+          onChangeText={props.onChangeText}
+          autoCapitalize="none"
+        />
+      </>
+    );
+  } else {
+    screen = (
+      <>
+        <StyledLabelError>{props.label}</StyledLabelError>
+        <StyledTextFieldError
+          onChangeText={props.onChangeText}
+          autoCapitalize="none"
+        />
+        <Error>{props.error}</Error>
+      </>
+    );
+  }
+  return <StyledFormView>{screen}</StyledFormView>;
 };
 
 const Error = styled.Text`
@@ -43,10 +57,28 @@ const StyledTextField = styled.TextInput`
   color: #fff;
 `;
 
+const StyledTextFieldError = styled.TextInput`
+  border-width: 2px;
+  border-color: #a9a9a9;
+  background-color: #d94745;
+  height: 40px;
+  border-radius: 5px;
+  width: 300px;
+  text-align: center;
+  color: #fff;
+`;
+
 const StyledLabel = styled.Text`
   font-size: 12px;
   font-weight: normal;
   color: #b2babb;
+  margin-bottom: 12px;
+`;
+
+const StyledLabelError = styled.Text`
+  font-size: 12px;
+  font-weight: normal;
+  color: #cb2c2a;
   margin-bottom: 12px;
 `;
 
