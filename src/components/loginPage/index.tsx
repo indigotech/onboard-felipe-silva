@@ -3,7 +3,7 @@ import {sendLogin} from '../../services/sendLogin';
 import styles from './styles';
 import {View, Text, TextInput, Alert} from 'react-native';
 import {Navigation} from 'react-native-navigation';
-import SquareButton from '../button';
+import FunctButton from '../button';
 
 const validatePassword = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
 const validateEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -81,7 +81,7 @@ export default class Main extends Component<
               onChangeText={(senha) => this.setState({password: senha})}
             />
           </View>
-          <SquareButton
+          <FunctButton
             loading={this.state.isLoading}
             onPress={this.validateFields}
             title={'Login'}

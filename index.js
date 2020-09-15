@@ -6,12 +6,14 @@ import React from 'react';
 import {Navigation} from 'react-native-navigation';
 import Main from './src/components/loginPage';
 import UserList from './src/components/userList';
+import UserDetail from './src/components/userDetail';
 import AddUser from './src/components/addUser/addUser';
 import {ApolloProvider} from '@apollo/client';
 import {client} from './src/services/getUserList';
 
 Navigation.registerComponent('Main', () => Main);
 Navigation.registerComponent('UserList', () => UserList);
+
 Navigation.registerComponent(
   'AddUser',
   () => (props) => (
@@ -20,6 +22,16 @@ Navigation.registerComponent(
     </ApolloProvider>
   ),
   () => AddUser,
+);
+
+Navigation.registerComponent(
+  'UserDetail',
+  () => (props) => (
+    <ApolloProvider client={client}>
+      <UserDetail {...props} />
+    </ApolloProvider>
+  ),
+  () => UserDetail,
 );
 
 Navigation.events().registerAppLaunchedListener(() => {
@@ -69,6 +81,18 @@ AddUser.options = {
   topBar: {
     title: {
       text: 'Sign Up',
+      color: '#D0D3D4',
+    },
+    background: {
+      color: '#0d0d0f',
+    },
+  },
+};
+
+UserDetail.options = {
+  topBar: {
+    title: {
+      text: 'User Detail',
       color: '#D0D3D4',
     },
     background: {

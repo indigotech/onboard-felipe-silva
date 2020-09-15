@@ -14,7 +14,7 @@ interface SquareButtonProps {
   title: string;
 }
 
-const SquareButton: React.FC<SquareButtonProps> = (props) => {
+const FunctButton: React.FC<SquareButtonProps> = (props) => {
   let button;
   if (props.loading) {
     button = (
@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SquareButton;
+export default FunctButton;
