@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {View, Alert} from 'react-native';
-import H1 from '../H1';
+import {H1} from '../H1';
 import styles from './styles';
 import {Navigation, NavigationFunctionComponent} from 'react-native-navigation';
 import {
@@ -83,7 +83,7 @@ const AddUser: NavigationFunctionComponent = (props) => {
 
   return (
     <View style={styles.screen}>
-      <H1 title={'Add User'} />
+      <H1>Add User</H1>
       <Forms
         label={'Full Name'}
         onChangeText={(val) => (name.current = val)}
@@ -111,7 +111,7 @@ const AddUser: NavigationFunctionComponent = (props) => {
       />
       <FunctButton
         loading={loading}
-        onPress={() => validateFields()}
+        onPress={validateFields}
         title={'Cadastrar'}
       />
     </View>

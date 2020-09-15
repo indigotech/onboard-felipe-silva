@@ -8,30 +8,19 @@ interface FormsProps {
 }
 
 const Forms: React.FC<FormsProps> = (props) => {
-  let screen;
-  if (!props.error) {
-    screen = (
-      <>
-        <StyledLabel>{props.label}</StyledLabel>
-        <StyledTextField
-          onChangeText={props.onChangeText}
-          autoCapitalize="none"
-        />
-      </>
-    );
-  } else {
-    screen = (
-      <>
-        <StyledLabelError>{props.label}</StyledLabelError>
-        <StyledTextFieldError
-          onChangeText={props.onChangeText}
-          autoCapitalize="none"
-        />
-        <Error>{props.error}</Error>
-      </>
-    );
-  }
-  return <StyledFormView>{screen}</StyledFormView>;
+  return (
+    <StyledFormView>
+      <StyledLabel fontColor={!props.error ? '#b2babb' : '#cb2c2a'}>
+        {props.label}
+      </StyledLabel>
+      <StyledTextField
+        onChangeText={props.onChangeText}
+        autoCapitalize="none"
+        backgroundColor={!props.error ? '#515A5A' : '#d94745'}
+      />
+      {props.error !== '' && <Error>{props.error}</Error>}
+    </StyledFormView>
+  );
 };
 
 const Error = styled.Text`
@@ -46,10 +35,10 @@ const StyledFormView = styled.View`
   align-items: center;
 `;
 
-const StyledTextField = styled.TextInput`
+const StyledTextField = styled.TextInput<{backgroundColor: string}>`
   border-width: 2px;
   border-color: #a9a9a9;
-  background-color: #515a5a;
+  background-color: ${(props) => `${props.backgroundColor}`}
   height: 40px;
   border-radius: 5px;
   width: 300px;
@@ -57,28 +46,10 @@ const StyledTextField = styled.TextInput`
   color: #fff;
 `;
 
-const StyledTextFieldError = styled.TextInput`
-  border-width: 2px;
-  border-color: #a9a9a9;
-  background-color: #d94745;
-  height: 40px;
-  border-radius: 5px;
-  width: 300px;
-  text-align: center;
-  color: #fff;
-`;
-
-const StyledLabel = styled.Text`
+const StyledLabel = styled.Text<{fontColor: string}>`
   font-size: 12px;
   font-weight: normal;
-  color: #b2babb;
-  margin-bottom: 12px;
-`;
-
-const StyledLabelError = styled.Text`
-  font-size: 12px;
-  font-weight: normal;
-  color: #cb2c2a;
+  color: ${(props) => `${props.fontColor}`};
   margin-bottom: 12px;
 `;
 

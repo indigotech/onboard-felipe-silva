@@ -4,7 +4,7 @@ import styles from './styles';
 import {View, Alert, StatusBar} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import FunctButton from '../button';
-import H1 from '../H1';
+import {H1} from '../H1';
 import Forms from '../form';
 import {validateEmail, validatePassword} from '../../services/validateForms';
 
@@ -56,7 +56,7 @@ export default class Main extends Component<
   private validateFields = () => {
     if (
       validateEmail(this.state.email).boolean &&
-      validatePassword(this.state.password)
+      validatePassword(this.state.password).boolean
     ) {
       this.login();
     } else {
@@ -74,7 +74,7 @@ export default class Main extends Component<
       <>
         <StatusBar barStyle="light-content" />
         <View style={styles.loginContainer}>
-          <H1 title={'Bem-vindo(a) à Taqtile!'} />
+          <H1>Bem-vindo(a) à Taqtile!</H1>
           <View style={styles.loginTextInputsButton}>
             <Forms
               label={'E-mail'}
