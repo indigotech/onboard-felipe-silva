@@ -83,27 +83,3 @@ const StyledLabelError = styled.Text`
 `;
 
 export default Forms;
-
-// <TextInput
-// style={styles.loginInput}
-// autoCapitalize="none"
-// onChangeText={(senha) => this.setState({password: senha})}
-// />
-
-// loginInput: {
-//     height: 40,
-//     width: 300,
-//     marginTop: 15,
-//     marginBottom: 15,
-//     borderColor: '#a9a9a9',
-//     borderWidth: 2,
-//     color: '#FFF',
-//     borderRadius: 5,
-//     textAlign: 'center',
-//     backgroundColor: '#515A5A',
-//   },
-// textInput: {
-//     fontSize: 15,
-//     marginTop: 20,
-//     color: '#B2BABB',
-//   },

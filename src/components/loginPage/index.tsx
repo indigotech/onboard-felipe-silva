@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {sendLogin} from '../../services/sendLogin';
 import styles from './styles';
-import {View, Alert} from 'react-native';
+import {View, Alert, StatusBar} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import FunctButton from '../button';
 import H1 from '../H1';
@@ -72,6 +72,7 @@ export default class Main extends Component<
   render() {
     return (
       <>
+        <StatusBar barStyle="light-content" />
         <View style={styles.loginContainer}>
           <H1 title={'Bem-vindo(a) à Taqtile!'} />
           <View style={styles.loginTextInputsButton}>
