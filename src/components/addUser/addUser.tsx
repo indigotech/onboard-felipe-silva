@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {View, Alert} from 'react-native';
 import {H1} from '../H1';
 import styles from './styles';
@@ -8,6 +8,7 @@ import {
   validateEmail,
   validatePassword,
   validatePhone,
+  validateName,
 } from '../../services/validateForms';
 import {useMutation} from '@apollo/client';
 import {
@@ -25,37 +26,45 @@ interface User {
   birthDate: string;
 }
 
-const AddUser: NavigationFunctionComponent = (props) => {
-  const name = useRef('');
-  const email = useRef('');
-  const password = useRef('');
-  const birthDate = useRef('');
-  const phone = useRef('');
+const AddUser: NavigationFunctionComponent<{OnSubmit: boolean}> = (props) => {
+  const name = useRef({value: '', valid: false});
+  const email = useRef({value: '', valid: false});
+  const password = useRef({value: '', valid: false});
+  const birthDate = useRef({value: '', valid: false});
+  const phone = useRef({value: '', valid: false});
   const role = useRef('user');
-  const [errors, setErrors] = useState({
-    phoneError: '',
-    emailError: '',
-    birthDateError: '',
-    passwordError: '',
-  });
+  const [onSubmit, setOnSubmit] = useState(false);
   const [mutate, {loading, error}] = useMutation<User, CreateUserVariables>(
     CreateUserMutation,
   );
 
+  useEffect(() => setOnSubmit(false), [onSubmit]);
+
   const validateFields = async () => {
+    setOnSubmit(true);
+    console.log('name');
+    console.log(name.current.valid);
+    console.log('email');
+    console.log(email.current.valid);
+    console.log('password');
+    console.log(password.current.valid);
+    console.log('birthdate');
+    console.log(birthDate.current.valid);
+    console.log('phone');
+    console.log(phone.current.valid);
     const userInfo = {
-      name: name.current,
-      email: email.current,
-      password: password.current,
-      birthDate: birthDate.current,
-      phone: phone.current,
+      name: name.current.value,
+      email: email.current.value,
+      password: password.current.value,
+      birthDate: birthDate.current.value,
+      phone: phone.current.value,
       role: role.current,
     };
     if (
-      validatePhone(phone.current).boolean &&
-      validateEmail(email.current).boolean &&
-      validateDate(birthDate.current).boolean &&
-      validatePassword(password.current).boolean
+      phone.current.valid &&
+      email.current.valid &&
+      birthDate.current.valid &&
+      password.current.valid
     ) {
       try {
         await mutate({
@@ -71,13 +80,6 @@ const AddUser: NavigationFunctionComponent = (props) => {
       } catch (e) {
         Alert.alert(error.message);
       }
-    } else {
-      setErrors({
-        phoneError: validatePhone(phone.current).error,
-        emailError: validateEmail(email.current).error,
-        birthDateError: validateDate(birthDate.current).error,
-        passwordError: validatePassword(password.current).error,
-      });
     }
   };
 
@@ -85,29 +87,44 @@ const AddUser: NavigationFunctionComponent = (props) => {
     <View style={styles.screen}>
       <H1>Add User</H1>
       <Forms
+        startValidation={onSubmit}
         label={'Full Name'}
-        onChangeText={(val) => (name.current = val)}
-        error={''}
+        onChangeText={(value, valid) =>
+          (name.current = {value: value, valid: valid})
+        }
+        inputValidation={validateName}
       />
       <Forms
+        startValidation={onSubmit}
         label={'E-mail'}
-        onChangeText={(val) => (email.current = val)}
-        error={errors.emailError}
+        onChangeText={(value, valid) =>
+          (email.current = {value: value, valid: valid})
+        }
+        inputValidation={validateEmail}
       />
       <Forms
+        startValidation={onSubmit}
         label={'Password (At least 7 digits, one number and one letter):'}
-        onChangeText={(val) => (password.current = val)}
-        error={errors.passwordError}
+        onChangeText={(value, valid) =>
+          (password.current = {value: value, valid: valid})
+        }
+        inputValidation={validatePassword}
       />
       <Forms
+        startValidation={onSubmit}
         label={'Birthdate (yyyy-mm-dd)'}
-        onChangeText={(val) => (birthDate.current = val)}
-        error={errors.birthDateError}
+        onChangeText={(value, valid) =>
+          (birthDate.current = {value: value, valid: valid})
+        }
+        inputValidation={validateDate}
       />
       <Forms
+        startValidation={onSubmit}
         label={'Phone Number (only numbers):'}
-        onChangeText={(val) => (phone.current = val)}
-        error={errors.phoneError}
+        onChangeText={(value, valid) =>
+          (phone.current = {value: value, valid: valid})
+        }
+        inputValidation={validatePhone}
       />
       <FunctButton
         loading={loading}

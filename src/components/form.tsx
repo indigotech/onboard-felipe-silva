@@ -1,24 +1,46 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import styled from 'styled-components/native';
 
 interface FormsProps {
   label: string;
-  onChangeText: (text: string) => void;
-  error: string;
+  onChangeText: (text: string, valid: boolean) => void;
+  inputValidation: (val: string) => {boolean: boolean; errorMessage: string};
+  startValidation: boolean;
 }
 
 const Forms: React.FC<FormsProps> = (props) => {
+  const value = useRef('');
+  const error = useRef({boolean: true, errorMessage: ''});
+
+  if (props.startValidation) {
+    error.current = {
+      boolean: props.inputValidation(value.current).boolean,
+      errorMessage: props.inputValidation(value.current).errorMessage,
+    };
+  }
+
+  const handleValidation = (input: string) => {
+    if (props.startValidation) {
+      error.current = {
+        boolean: props.inputValidation(value.current).boolean,
+        errorMessage: props.inputValidation(value.current).errorMessage,
+      };
+    }
+    props.onChangeText(input, props.inputValidation(input).boolean);
+    value.current = input;
+  };
+
   return (
     <StyledFormView>
-      <StyledLabel fontColor={!props.error ? '#b2babb' : '#cb2c2a'}>
+      <StyledLabel fontColor={error.current.boolean ? '#b2babb' : '#cb2c2a'}>
         {props.label}
       </StyledLabel>
       <StyledTextField
-        onChangeText={props.onChangeText}
+        onChangeText={(input) => handleValidation(input)}
         autoCapitalize="none"
-        backgroundColor={!props.error ? '#515A5A' : '#d94745'}
+        backgroundColor={error.current.boolean ? '#515A5A' : '#d94745'}
       />
-      {props.error !== '' && <Error>{props.error}</Error>}
+      {!error.current.boolean && <Error>{error.current.errorMessage}</Error>}
     </StyledFormView>
   );
 };

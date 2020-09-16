@@ -9,12 +9,11 @@ import Forms from '../form';
 import {validateEmail, validatePassword} from '../../services/validateForms';
 
 interface MainComponentState {
-  email: string;
-  password: string;
+  email: {value: string; valid: boolean};
+  password: {value: string; valid: boolean};
   isLoading: boolean;
-  emailError: string;
-  passwordError: string;
-  errors: {emailError: string; passwordError: string};
+  onSubmit: boolean;
+  teste: boolean;
 }
 
 interface MainComponentProps {
@@ -28,19 +27,18 @@ export default class Main extends Component<
   constructor(props: MainComponentProps) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
+      email: {value: '', valid: false},
+      password: {value: '', valid: false},
       isLoading: false,
-      emailError: '',
-      passwordError: '',
-      errors: {emailError: '', passwordError: ''},
+      onSubmit: false,
+      teste: false,
     };
   }
 
   private login = async () => {
     this.setState({isLoading: true});
     try {
-      await sendLogin(this.state.email, this.state.password);
+      await sendLogin(this.state.email.value, this.state.password.value);
       Navigation.push(this.props.componentId, {
         component: {
           name: 'UserList',
@@ -54,19 +52,14 @@ export default class Main extends Component<
   };
 
   private validateFields = () => {
-    if (
-      validateEmail(this.state.email).boolean &&
-      validatePassword(this.state.password).boolean
-    ) {
+    if (this.state.email.valid && this.state.password.valid) {
       this.login();
-    } else {
-      this.setState({
-        errors: {
-          emailError: validateEmail(this.state.email).error,
-          passwordError: validatePassword(this.state.password).error,
-        },
-      });
     }
+  };
+
+  private handleSubmit = () => {
+    this.validateFields();
+    this.setState({onSubmit: true});
   };
 
   render() {
@@ -77,19 +70,25 @@ export default class Main extends Component<
           <H1>Bem-vindo(a) à Taqtile!</H1>
           <View style={styles.loginTextInputsButton}>
             <Forms
+              startValidation={this.state.onSubmit}
               label={'E-mail'}
-              onChangeText={(email) => this.setState({email: email})}
-              error={this.state.errors.emailError}
+              onChangeText={(email, valid) =>
+                this.setState({email: {value: email, valid: valid}})
+              }
+              inputValidation={validateEmail}
             />
             <Forms
+              startValidation={this.state.onSubmit}
               label={'Senha'}
-              onChangeText={(senha) => this.setState({password: senha})}
-              error={this.state.errors.passwordError}
+              onChangeText={(password, valid) =>
+                this.setState({password: {value: password, valid: valid}})
+              }
+              inputValidation={validatePassword}
             />
           </View>
           <FunctButton
             loading={this.state.isLoading}
-            onPress={this.validateFields}
+            onPress={this.handleSubmit}
             title={'Login'}
           />
         </View>

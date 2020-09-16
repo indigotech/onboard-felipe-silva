@@ -9,16 +9,14 @@ interface SquareButtonProps {
 }
 
 const FunctButton: React.FC<SquareButtonProps> = (props) => {
-  let button;
-  if (props.loading) {
-    button = <ActivityIndicator size="large" color="#FFF" />;
-  } else {
-    button = <StyledText>{props.title}</StyledText>;
-  }
   return (
     <View>
       <StyledTouchableOpacity onPress={props.onPress} disabled={props.loading}>
-        {button}
+        {props.loading ? (
+          <ActivityIndicator size="large" color="#FFF" />
+        ) : (
+          <StyledText>{props.title}</StyledText>
+        )}
       </StyledTouchableOpacity>
     </View>
   );
