@@ -1,17 +1,19 @@
 import React, {Component} from 'react';
 import {sendLogin} from '../../services/sendLogin';
 import styles from './styles';
-import {View, Text, TextInput, Alert} from 'react-native';
+import {View, Alert, StatusBar} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import FunctButton from '../button';
-
-const validatePassword = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
-const validateEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+import {H1} from '../H1';
+import Forms from '../form';
+import {validateEmail, validatePassword} from '../../services/validateForms';
 
 interface MainComponentState {
-  email: string;
-  password: string;
+  email: {value: string; valid: boolean};
+  password: {value: string; valid: boolean};
   isLoading: boolean;
+  onSubmit: boolean;
+  teste: boolean;
 }
 
 interface MainComponentProps {
@@ -25,16 +27,18 @@ export default class Main extends Component<
   constructor(props: MainComponentProps) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
+      email: {value: '', valid: false},
+      password: {value: '', valid: false},
       isLoading: false,
+      onSubmit: false,
+      teste: false,
     };
   }
 
   private login = async () => {
     this.setState({isLoading: true});
     try {
-      await sendLogin(this.state.email, this.state.password);
+      await sendLogin(this.state.email.value, this.state.password.value);
       Navigation.push(this.props.componentId, {
         component: {
           name: 'UserList',
@@ -48,42 +52,39 @@ export default class Main extends Component<
   };
 
   private validateFields = () => {
-    if (this.state.email === '' || this.state.password === '') {
-      Alert.alert('Fill the entries with a valid format');
+    if (this.state.email.valid && this.state.password.valid) {
+      this.login();
     }
-    if (validateEmail.test(this.state.email)) {
-      if (validatePassword.test(this.state.password)) {
-        this.login();
-      } else {
-        Alert.alert('Valid e-mail, but invalid password');
-      }
-    } else {
-      Alert.alert('Invalid e-mail.');
-    }
+  };
+
+  private handleSubmit = () => {
+    this.validateFields();
+    this.setState({onSubmit: true});
   };
 
   render() {
     return (
       <>
+        <StatusBar barStyle="light-content" />
         <View style={styles.loginContainer}>
-          <Text style={styles.title}>Bem-vindo(a) à Taqtile!</Text>
+          <H1>Bem-vindo(a) à Taqtile!</H1>
           <View style={styles.loginTextInputsButton}>
-            <Text style={styles.textInput}>E-mail</Text>
-            <TextInput
-              style={styles.loginInput}
-              autoCapitalize="none"
-              onChangeText={(val) => this.setState({email: val})}
+            <Forms
+              startValidation={this.state.onSubmit}
+              label={'E-mail'}
+              onChangeText={(field) => this.setState({email: field})}
+              inputValidation={validateEmail}
             />
-            <Text style={styles.textInput}>Senha</Text>
-            <TextInput
-              style={styles.loginInput}
-              autoCapitalize="none"
-              onChangeText={(senha) => this.setState({password: senha})}
+            <Forms
+              startValidation={this.state.onSubmit}
+              label={'Senha'}
+              onChangeText={(field) => this.setState({password: field})}
+              inputValidation={validatePassword}
             />
           </View>
           <FunctButton
             loading={this.state.isLoading}
-            onPress={this.validateFields}
+            onPress={this.handleSubmit}
             title={'Login'}
           />
         </View>
