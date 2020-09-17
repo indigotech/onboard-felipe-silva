@@ -1,9 +1,9 @@
 export const validateName = (name: string) => {
   const nameTester = /^([a-zA-Z]{2,}\s[a-zA-Z]{1,}'?-?[a-zA-Z]{2,}\s?([a-zA-Z]{1,})?)/;
   if (nameTester.test(name)) {
-    return {boolean: nameTester.test(name), errorMessage: null};
+    return {isValid: nameTester.test(name), errorMessage: null};
   } else {
-    return {boolean: nameTester.test(name), errorMessage: 'Invalid name'};
+    return {isValid: nameTester.test(name), errorMessage: 'Invalid name'};
   }
 };
 
@@ -18,12 +18,12 @@ export const validateDate = (date: string) => {
   );
   if (dateTester.test(date) && birth <= todayDate) {
     return {
-      boolean: dateTester.test(date) && birth <= todayDate,
+      isValid: dateTester.test(date) && birth <= todayDate,
       errorMessage: null,
     };
   } else {
     return {
-      boolean: dateTester.test(date) && birth <= todayDate,
+      isValid: dateTester.test(date) && birth <= todayDate,
       errorMessage: 'Invalid Date',
     };
   }
@@ -32,19 +32,19 @@ export const validateDate = (date: string) => {
 export const validateEmail = (email: string) => {
   const emailTester = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
   if (emailTester.test(email)) {
-    return {boolean: emailTester.test(email), errorMessage: null};
+    return {isValid: emailTester.test(email), errorMessage: null};
   } else {
-    return {boolean: emailTester.test(email), errorMessage: 'Invalid e-mail'};
+    return {isValid: emailTester.test(email), errorMessage: 'Invalid e-mail'};
   }
 };
 
 export const validatePassword = (password: string) => {
   const passwordTester = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
   if (passwordTester.test(password)) {
-    return {boolean: passwordTester.test(password), errorMessage: null};
+    return {isValid: passwordTester.test(password), errorMessage: null};
   } else {
     return {
-      boolean: passwordTester.test(password),
+      isValid: passwordTester.test(password),
       errorMessage:
         'Password must contain 7 digits and at least one number and one letter',
     };
@@ -55,12 +55,12 @@ export const validatePhone = (phone: string) => {
   const phoneTester = /^[0-9]*$/;
   if (phoneTester.test(phone) && phone.length > 8) {
     return {
-      boolean: phoneTester.test(phone) && phone.length > 8,
+      isValid: phoneTester.test(phone) && phone.length > 8,
       errorMessage: null,
     };
   } else {
     return {
-      boolean: phoneTester.test(phone) && phone.length > 8,
+      isValid: phoneTester.test(phone) && phone.length > 8,
       errorMessage: 'Invalid phone number',
     };
   }

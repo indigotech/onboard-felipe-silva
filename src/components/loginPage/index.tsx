@@ -72,17 +72,13 @@ export default class Main extends Component<
             <Forms
               startValidation={this.state.onSubmit}
               label={'E-mail'}
-              onChangeText={(email, valid) =>
-                this.setState({email: {value: email, valid: valid}})
-              }
+              onChangeText={(field) => this.setState({email: field})}
               inputValidation={validateEmail}
             />
             <Forms
               startValidation={this.state.onSubmit}
               label={'Senha'}
-              onChangeText={(password, valid) =>
-                this.setState({password: {value: password, valid: valid}})
-              }
+              onChangeText={(field) => this.setState({password: field})}
               inputValidation={validatePassword}
             />
           </View>
